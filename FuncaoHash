@@ -1,0 +1,3 @@
+public interface FuncaoHash {
+    int calcularHash(String codigo);
+}
