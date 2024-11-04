@@ -1,17 +1,16 @@
 public class HashDobramento implements FuncaoHash {
-    private int tamanho;
-
-    public HashDobramento(int tamanho) {
-        this.tamanho = tamanho;
-    }
-
     @Override
     public int calcularHash(String codigo) {
         int hash = 0;
         for (int i = 0; i < codigo.length(); i += 2) {
-            String part = codigo.substring(i, Math.min(i + 2, codigo.length()));
-            hash += Integer.parseInt(part);
+            String parte = codigo.substring(i, Math.min(i + 2, codigo.length()));
+            hash += Integer.parseInt(parte);
         }
-        return hash % tamanho;
+        return hash % 1000; // Ajuste o divisor conforme o tamanho da tabela
+    }
+
+    @Override
+    public String getNome() {
+        return "Dobramento";
     }
 }
