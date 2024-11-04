@@ -1,66 +1,51 @@
-import java.util.LinkedList;
-
 public class TabelaHash {
-    private Registro[] tabelaRehash; // Para rehashing linear
-    private LinkedList<Registro>[] tabelaEncadeamento; // Para encadeamento separado
-    private boolean encadeamentoSeparado;
+    private int tamanho;
     private FuncaoHash funcaoHash;
+    private int contagemColisoes;
+    private int contagemComparacoes;
+    
 
-    public TabelaHash(int tamanho, FuncaoHash funcaoHash, boolean encadeamentoSeparado) {
+    public TabelaHash(int tamanho, FuncaoHash funcaoHash) {
+        this.tamanho = tamanho;
         this.funcaoHash = funcaoHash;
-        this.encadeamentoSeparado = encadeamentoSeparado;
-
-        if (encadeamentoSeparado) {
-            // Inicializa a tabela de encadeamento separado como um array de listas encadeadas
-            tabelaEncadeamento = new LinkedList[tamanho];
-            for (int i = 0; i < tamanho; i++) {
-                tabelaEncadeamento[i] = new LinkedList<>();
-            }
-        } else {
-            // Inicializa a tabela de rehashing linear como um array de Registros
-            tabelaRehash = new Registro[tamanho];
-        }
+        this.contagemColisoes = 0;
+        this.contagemComparacoes = 0;
+        
     }
 
-    // Método inserir com tratamento de colisão e índice normalizado
+    // Método de inserção para registro
     public int inserir(Registro registro) {
-        int comparacoes = 0;
-        int index = Math.abs(funcaoHash.calcularHash(registro.getCodigo())) % (encadeamentoSeparado ? tabelaEncadeamento.length : tabelaRehash.length);
-
-        if (encadeamentoSeparado) {
-            tabelaEncadeamento[index].add(registro);
-        } else {
-            // Rehashing linear para resolver colisões
-            while (tabelaRehash[index] != null) {
-                comparacoes++;
-                index = (index + 1) % tabelaRehash.length; // Incremento circular para rehashing linear
-            }
-            tabelaRehash[index] = registro;
-        }
-        return comparacoes;
+        int hash = funcaoHash.calcularHash(registro.getCodigo());
+        // Código para inserir o registro na tabela com tratamento de colisões
+        // Incrementa contagemColisoes se houver uma colisão
+        return hash;
     }
 
-    // Método buscar com normalização do índice e comparação correta
-    public int buscar(String codigo) {
-        int comparacoes = 0;
-        int index = Math.abs(funcaoHash.calcularHash(codigo)) % (encadeamentoSeparado ? tabelaEncadeamento.length : tabelaRehash.length);
+    // Método de inserção para inteiro
+    public int inserir(int valor) {
+        String codigo = String.valueOf(valor);
+        Registro registro = new Registro(codigo);
+        return inserir(registro);
+    }
 
-        if (encadeamentoSeparado) {
-            for (Registro reg : tabelaEncadeamento[index]) {
-                comparacoes++;
-                if (reg.getCodigo().equals(codigo)) { // Comparação correta usando equals
-                    return comparacoes;
-                }
-            }
-        } else {
-            while (tabelaRehash[index] != null) {
-                comparacoes++;
-                if (tabelaRehash[index].getCodigo().equals(codigo)) { // Comparação correta usando equals
-                    return comparacoes;
-                }
-                index = (index + 1) % tabelaRehash.length; // Incremento circular para busca linear
-            }
-        }
-        return -1; // Não encontrado
+    public int buscar(String codigo) {
+        int hash = funcaoHash.calcularHash(codigo);
+
+        // Código para busca na tabela com contagem de comparações
+
+        return -1; // Retorna o índice ou -1 se não encontrar
+    }
+
+    public int getContagemColisoes() {
+        return contagemColisoes;
+    }
+
+    public int getContagemComparacoes() {
+        return contagemComparacoes;
+    }
+
+    public void resetarContadores() {
+        contagemColisoes = 0;
+        contagemComparacoes = 0;
     }
 }
