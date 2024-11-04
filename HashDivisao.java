@@ -1,13 +1,12 @@
 public class HashDivisao implements FuncaoHash {
-    private int tamanho;
-
-    public HashDivisao(int tamanho) {
-        this.tamanho = tamanho;
+    @Override
+    public int calcularHash(String codigo) {
+        int valor = Integer.parseInt(codigo);
+        return valor % 1000; // Ajuste o divisor conforme o tamanho da tabela
     }
 
     @Override
-    public int calcularHash(String codigo) {
-        int num = Integer.parseInt(codigo);
-        return num % tamanho;
+    public String getNome() {
+        return "Divisão";
     }
 }
