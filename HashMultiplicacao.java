@@ -1,14 +1,13 @@
 public class HashMultiplicacao implements FuncaoHash {
-    private int tamanho;
-
-    public HashMultiplicacao(int tamanho) {
-        this.tamanho = tamanho;
+    @Override
+    public int calcularHash(String codigo) {
+        double A = 0.6180339887; // Constante de Knuth
+        int valor = Integer.parseInt(codigo);
+        return (int) Math.floor(1000 * (valor * A % 1)); // Ajuste o multiplicador conforme o tamanho da tabela
     }
 
     @Override
-    public int calcularHash(String codigo) {
-        double A = 0.6180339887; // constante de Knuth
-        int num = Integer.parseInt(codigo);
-        return (int) Math.floor(tamanho * (num * A % 1));
+    public String getNome() {
+        return "Multiplicação";
     }
 }
