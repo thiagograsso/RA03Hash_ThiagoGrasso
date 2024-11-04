@@ -1,5 +1,5 @@
 public class Registro {
-    private String codigo;
+    private final String codigo;
 
     public Registro(String codigo) {
         this.codigo = codigo;
